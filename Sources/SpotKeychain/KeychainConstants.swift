@@ -80,7 +80,7 @@ extension Keychain {
 	@available(watchOS, unavailable)
 	static let UseAuthenticationUISkip = String(kSecUseAuthenticationUISkip)
 	
-	#if os(iOS)
+	#if os(iOS) && !targetEnvironment(macCatalyst)
 	static let SharedPassword = String(kSecSharedPassword)
 	#endif
 }

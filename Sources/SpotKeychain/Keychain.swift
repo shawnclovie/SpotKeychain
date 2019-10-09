@@ -249,7 +249,7 @@ public final class Keychain {
 	
 	// MARK: -
 	
-	#if os(iOS)
+	#if os(iOS) && !targetEnvironment(macCatalyst)
 	public func requestSharedPassword(_ completion: @escaping (_ account: String?, _ password: String?, Error?)->Void) {
 		if let domain = options.server?.host {
 			type(of: self).requestSharedWebCredential(domain: domain, account: nil) { (credentials, error) -> () in
@@ -306,9 +306,7 @@ public final class Keychain {
 			completion(result, remoteError)
 		}
 	}
-	#endif
 	
-	#if os(iOS)
 	private func setSharedPassword(_ password: String?, account: String, completion: ((Error?)->Void)? = nil) {
 		if let domain = options.server?.host {
 			SecAddSharedWebCredential(domain as CFString, account as CFString, password as CFString?) { error in
@@ -322,9 +320,7 @@ public final class Keychain {
 	public func removeSharedPassword(account: String, completion: ((Error?)->Void)? = nil) {
 		setSharedPassword(nil, account: account, completion: completion)
 	}
-	#endif
 	
-	#if os(iOS)
 	/// Returns a randomly generated password.
 	/// - Returns: password in the form xxx-xxx-xxx-xxx where x is taken from the sets "abcdefghkmnopqrstuvwxy", "ABCDEFGHJKLMNPQRSTUVWXYZ", "3456789" with at least one character from each set being present.
 	public static func generatePassword() -> String {
